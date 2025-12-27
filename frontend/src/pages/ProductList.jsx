@@ -4,6 +4,7 @@ function ProductList({ addToCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetch('/api/products')
@@ -21,6 +22,16 @@ function ProductList({ addToCart }) {
   const styles = {
     container: {
       padding: '20px'
+    },
+    searchInput: {
+      width: '100%',
+      maxWidth: '600px',
+      padding: '12px 16px',
+      fontSize: '16px',
+      border: '1px solid #ddd',
+      borderRadius: '4px',
+      marginTop: '12px',
+      boxSizing: 'border-box'
     },
     grid: {
       display: 'grid',
@@ -71,11 +82,25 @@ function ProductList({ addToCart }) {
   if (loading) return <div style={styles.container}>Loading products...</div>;
   if (error) return <div style={styles.container}>{error}</div>;
 
+  // Filter products based on search term (case-insensitive)
+  const filteredProducts = products.filter(product => {
+    const search = searchTerm.toLowerCase();
+    return product.name.toLowerCase().includes(search) ||
+           product.description.toLowerCase().includes(search);
+  });
+
   return (
     <div style={styles.container}>
       <h2>Products</h2>
+      <input
+        type="text"
+        placeholder="Search products by name or description..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={styles.searchInput}
+      />
       <div style={styles.grid}>
-        {products.map(product => (
+        {filteredProducts.map(product => (
           <div key={product.id} style={styles.card}>
             <div onClick={() => window.location.hash = `#/product/${product.id}`}>
               <img src={product.image} alt={product.name} style={styles.image} />
