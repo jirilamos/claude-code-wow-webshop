@@ -23,11 +23,11 @@
    ```bash
    npm run dev
    ```
-   This starts:
+   This starts (without Docker):
    - Backend on http://localhost:3001
    - Frontend on http://localhost:5173
 
-3. **Open the app:**
+3. **Open the app:  (without Docker)**
    Navigate to http://localhost:5173
 
 ## Docker Mode
